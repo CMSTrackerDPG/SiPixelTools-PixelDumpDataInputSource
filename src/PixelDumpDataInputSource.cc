@@ -130,12 +130,12 @@ PixelDumpDataInputSource::PixelDumpDataInputSource(const edm::ParameterSet& pset
 
   m_fileindex++;
   // reading both castor and other ('normal'/dcap) files.
-  IOOffset size = -1;
-  StorageFactory::getToModify()->enableAccounting(true);
+  edm::storage::IOOffset size = -1;
+  edm::storage::StorageFactory::getToModify()->enableAccounting(true);
     
   //edm::LogInfo("PixelDumpDataInputSource") << " unsigned long int size = " << sizeof(unsigned long int) <<"\n unsigned long size = " << sizeof(unsigned long)<<"\n unsigned long long size = " << sizeof(unsigned long long) <<  "\n uint32_t size = " << sizeof(uint32_t) << "\n uint64_t size = " << sizeof(uint64_t) << std::endl;
 
-  bool exists = StorageFactory::get() -> check(currentfilename.c_str(), &size);
+  bool exists = edm::storage::StorageFactory::get() -> check(currentfilename.c_str(), &size);
   
   edm::LogInfo("PixelDumpDataInputSource") << "file size " << size << std::endl;
   
@@ -144,12 +144,12 @@ PixelDumpDataInputSource::PixelDumpDataInputSource(const edm::ParameterSet& pset
     return;
   }
   // now open the file stream:
-  storage =StorageFactory::get()->open(currentfilename.c_str());
+  storage = edm::storage::StorageFactory::get()->open(currentfilename.c_str());
   // (throw if storage is 0)
 
   // check run number by opening up data file...
   
-  Storage & temp_file = *storage;
+  edm::storage::Storage & temp_file = *storage;
   //  IOSize n =
   temp_file.read((char*)&m_data,8);
   //if((m_data >> 60) != 0x5){ 
@@ -192,7 +192,7 @@ bool PixelDumpDataInputSource:: is_trailer(unsigned long long value) {
 
 
 bool PixelDumpDataInputSource::setRunAndEventInfo(edm::EventID& id, edm::TimeValue_t& time, edm::EventAuxiliary::ExperimentType&) {
-  Storage & m_file = *storage;
+  edm::storage::Storage & m_file = *storage;
 
   // create product (raw data)
   buffers.reset( new FEDRawDataCollection );
